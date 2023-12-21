@@ -11,6 +11,7 @@
         <Button x:Uid="1" Content="Difficulty 1" Padding="10px" FontSize="16px" HorizontalAlignment="Center" Margin="0,82,0,0" VerticalAlignment="Top" Width="144" Click="Button_Click"/>
         <Button x:Uid="2" Content="Difficulty 2" Padding="10px" FontSize="16px" HorizontalAlignment="Center" Margin="0,130,0,0" VerticalAlignment="Top" Width="144" Click="Button_Click"/>
         <Button x:Uid="3" Content="Difficulty 3" Padding="10px" FontSize="16px" HorizontalAlignment="Center" Margin="0,178,0,0" VerticalAlignment="Top" Width="144" Click="Button_Click"/>
+        <Button x:Uid="4" Content="Difficulty 4" Padding="10px" FontSize="16px" HorizontalAlignment="Center" Margin="0,226,0,0" VerticalAlignment="Top" Width="144" Click="Button_Click"/>
 
     </Grid>
 </Window>

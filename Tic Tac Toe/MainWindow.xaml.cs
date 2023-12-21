@@ -91,6 +91,9 @@ namespace Tic_Tac_Toe
                     case 3:
                         BotThirdDifficultyMove();
                         break;
+                    case 4:
+                        BotFourthDifficultyMove();
+                        break;
                 }
 
                 if (CheckWin('O')) {
@@ -108,7 +111,7 @@ namespace Tic_Tac_Toe
         public void BotSecondDifficultyMove() {
             int[] move = GetWinningMove('X');
 
-            if (move != null)
+            if (move != null) // CHECK IF BOT CAN BLOCK PLAYER'S WINNING MOVE
                 MakeMove(move[0], move[1]);
             else
                 BotFirstDifficultyMove(); // MAKE RANDOM MOVE OTHERWISE
@@ -117,10 +120,76 @@ namespace Tic_Tac_Toe
         public void BotThirdDifficultyMove() {
             int[] move = GetWinningMove('O');
 
-            if (move != null)
+            if (move != null) // CHECK IF THERE IS WINNING MOVE OR NOT
                 MakeMove(move[0], move[1]);
             else
-                BotFirstDifficultyMove(); // MAKE LOWER DIFFICULTY MOVE OTHERWISE
+                BotSecondDifficultyMove(); // MAKE LOWER DIFFICULTY MOVE OTHERWISE
+        }
+
+        public void BotFourthDifficultyMove() {
+            int[] move = GetWinningMove('O');
+
+            if (move != null) { // CHECK IF THERE IS WINNING MOVE OR NOT
+                MakeMove(move[0], move[1]);
+                Debug.WriteLine($"Winning move for O found: [{move[0]}, {move[1]}]");
+                return;
+            }
+            else {
+                Debug.WriteLine("Winning move for O is not found");
+            }
+
+            move = GetWinningMove('X');
+
+            if (move != null) { // CHECK IF THERE IS WINNING MOVE OF PLAYER TO BLOCK
+                MakeMove(move[0], move[1]);
+                return;
+            }
+
+            if (board[1][1] == ' ') { // MAKE A MOVE IN THE MIDDLE IF IT'S NOT TAKEN
+                MakeMove(1, 1);
+                return;
+            }
+
+            List<int> cornerIndexes = Enumerable.Range(0, 4).ToList();
+            Shuffle(cornerIndexes);
+
+            bool moveMade = false;
+
+            foreach (int i in cornerIndexes) {
+                if (moveMade)
+                    return;
+
+                switch (i) {
+                    case 0:
+                        if (board[0][0] == ' ') {
+                            MakeMove(0, 0);
+                            moveMade = true;
+                        }
+                        break;
+                    case 1:
+                        if (board[0][2] == ' ') {
+                            MakeMove(0, 2);
+                            moveMade = true;
+                        }
+                        break;
+                    case 2:
+                        if (board[2][0] == ' ') {
+                            MakeMove(2, 0);
+                            moveMade = true;
+                        }
+                        break;
+                    case 3:
+                        if (board[2][2] == ' ') {
+                            MakeMove(2, 2);
+                            moveMade = true;
+                        }
+                        break;
+                }
+            }
+
+            BotThirdDifficultyMove(); // MAKE LOWER DIFFICULTY MOVE OTHERWISE
+
+            Debug.WriteLine("End of move");
         }
 
         public void MakeMove(int row, int column) {
@@ -135,8 +204,10 @@ namespace Tic_Tac_Toe
                     case 3:
                         BotThirdDifficultyMove();
                         break;
+                    case 4:
+                        BotFourthDifficultyMove();
+                        break;
                 }
-                return;
             }
             else {
                 GetButton(row, column).Content = "O";
@@ -189,37 +260,45 @@ namespace Tic_Tac_Toe
 
             if (board[0][0] == player) {
                 if (board[1][1] == player) {
-                    return new int[2] { 2, 2 };
+                    if (board[2][2] == ' ')
+                        return new int[2] { 2, 2 };
                 }
                 else if (board[2][2] == player) {
-                    return new int[2] { 1, 1 };
+                    if (board[1][1] == ' ')
+                        return new int[2] { 1, 1 };
                 }
             }
 
             if (board[0][2] == player) {
                 if (board[1][1] == player) {
-                    return new int[2] { 2, 0 };
+                    if (board[2][0] == ' ')
+                        return new int[2] { 2, 0 };
                 }
                 else if (board[2][0] == player) {
-                    return new int[2] { 1, 1 };
+                    if (board[1][1] == ' ')
+                        return new int[2] { 1, 1 };
                 }
             }
 
             if (board[2][0] == player) {
                 if (board[1][1] == player) {
-                    return new int[2] { 0, 2 };
+                    if (board[0][2] == ' ')
+                        return new int[2] { 0, 2 };
                 }
                 else if (board[0][2] == player) {
-                    return new int[2] { 1, 1 };
+                    if (board[1][1] == ' ')
+                        return new int[2] { 1, 1 };
                 }
             }
 
             if (board[2][2] == player) {
                 if (board[1][1] == player) {
-                    return new int[2] { 0, 0 };
+                    if (board[0][0] == ' ')
+                        return new int[2] { 0, 0 };
                 }
                 else if (board[0][0] == player) {
-                    return new int[2] { 1, 1 };
+                    if (board[1][1] == ' ')
+                        return new int[2] { 1, 1 };
                 }
             }
 
@@ -260,6 +339,18 @@ namespace Tic_Tac_Toe
             ChooseDifficulty chooseDifficulty = new ChooseDifficulty();
             chooseDifficulty.Show();
             this.Close();
+        }
+
+        public static void Shuffle(List<int> list) {
+            Random rng = new Random();
+            int n = list.Count;
+            while (n > 1) {
+                n--;
+                int k = rng.Next(n + 1);
+                int value = list[k];
+                list[k] = list[n];
+                list[n] = value;
+            }
         }
     }
 }
