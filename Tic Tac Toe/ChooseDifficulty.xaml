@@ -6,12 +6,27 @@
         xmlns:local="clr-namespace:Tic_Tac_Toe"
         mc:Ignorable="d"
         Title="ChooseDifficulty" Height="450" Width="400">
-    <Grid>
+    <Window.Resources>
+        <Style x:Key="DifficultyButtons" TargetType="Button">
+            <Setter Property="BorderBrush" Value="Transparent"></Setter>
+            <Setter Property="Control.BorderThickness" Value="5px"></Setter>
+            <Setter Property="Effect" >
+                <Setter.Value>
+                    <DropShadowEffect Color="Cyan" ShadowDepth="0" BlurRadius="10"/>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Background" Value="Black"></Setter>
+            <Setter Property="Foreground" Value="White"></Setter>
+
+           
+        </Style>
+    </Window.Resources>
+    <Grid Background="Black">
         <TextBlock FontSize="22px" TextAlignment="Center" HorizontalAlignment="Center" Margin="0,20,0,0" TextWrapping="Wrap" Text="Choose difficulty" VerticalAlignment="Top" Width="174"/>
-        <Button x:Uid="1" Content="Difficulty 1" Padding="10px" FontSize="16px" HorizontalAlignment="Center" Margin="0,82,0,0" VerticalAlignment="Top" Width="144" Click="Button_Click"/>
-        <Button x:Uid="2" Content="Difficulty 2" Padding="10px" FontSize="16px" HorizontalAlignment="Center" Margin="0,130,0,0" VerticalAlignment="Top" Width="144" Click="Button_Click"/>
-        <Button x:Uid="3" Content="Difficulty 3" Padding="10px" FontSize="16px" HorizontalAlignment="Center" Margin="0,178,0,0" VerticalAlignment="Top" Width="144" Click="Button_Click"/>
-        <Button x:Uid="4" Content="Difficulty 4" Padding="10px" FontSize="16px" HorizontalAlignment="Center" Margin="0,226,0,0" VerticalAlignment="Top" Width="144" Click="Button_Click"/>
+        <Button Style="{StaticResource DifficultyButtons}" x:Uid="1" Content="Difficulty 1" Padding="10px" FontSize="16px" HorizontalAlignment="Center" Margin="0,82,0,0" VerticalAlignment="Top" Width="144" Click="Button_Click" />
+        <Button Style="{StaticResource DifficultyButtons}" x:Uid="2" Content="Difficulty 2" Padding="10px" FontSize="16px" HorizontalAlignment="Center" Margin="0,130,0,0" VerticalAlignment="Top" Width="144" Click="Button_Click" Foreground="Azure"/>
+        <Button Style="{StaticResource DifficultyButtons}" x:Uid="3" Content="Difficulty 3" Padding="10px" FontSize="16px" HorizontalAlignment="Center" Margin="0,178,0,0" VerticalAlignment="Top" Width="144" Click="Button_Click" Foreground="Azure"/>
+        <Button Style="{StaticResource DifficultyButtons}" x:Uid="4" Content="Difficulty 4" Padding="10px" FontSize="16px" HorizontalAlignment="Center" Margin="0,226,0,0" VerticalAlignment="Top" Width="144" Click="Button_Click" Foreground="Azure"/>
 
     </Grid>
 </Window>

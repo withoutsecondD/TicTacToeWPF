@@ -63,8 +63,8 @@ namespace Tic_Tac_Toe
             if (board[row][column] == ' ') {
                 button.Content = 'X';
 
-                button.Background = Brushes.White;
-                button.Foreground = Brushes.Black;
+                button.Background = Brushes.Transparent;
+                button.Foreground = Brushes.White;
                 board[row][column] = 'X';
 
                 counter++;
@@ -211,7 +211,8 @@ namespace Tic_Tac_Toe
             }
             else {
                 GetButton(row, column).Content = "O";
-                GetButton(row, column).Background = Brushes.Gray;
+                GetButton(row, column).Background = Brushes.Transparent;
+                GetButton(row, column).Foreground = Brushes.Red;
                 board[row][column] = 'O';
                 counter++;
             }
