@@ -10,7 +10,6 @@
 
     <ItemGroup>
       <None Remove="assets\Kanit\Kanit-Regular.ttf" />
-      <Resource Include="assets\Kanit\Kanit-Regular.ttf" />
     </ItemGroup>
 
 </Project>
