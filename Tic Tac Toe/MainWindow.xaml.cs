@@ -16,67 +16,68 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 
-namespace Tic_Tac_Toe
-{
-    public partial class MainWindow : Window
-    {
+namespace Tic_Tac_Toe {
+    public partial class MainWindow : Window {
         private Random rand = new Random();
         private List<Button> buttons;
         private char[][] board = new char[3][];
+
+        public char[][] Board { get; set; }
+
         private bool gameOver = false;
+        
+        public bool GameOver { get; set; }
+        
         public int Difficulty { get; set; }
         private int counter = 0;
-     
-        public MainWindow()
-        {
+
+        public MainWindow() {
             InitializeComponent();
 
-            board = new char[3][];
+            Board = new char[3][];
 
             buttons = new List<Button>();
 
-            foreach (UIElement el in ButtonsGrid.Children)
-            {
+            foreach (UIElement el in ButtonsGrid.Children) {
                 if (el is Button && el.Uid != "New Game")
                     buttons.Add((Button)el);
             }
 
             for (int i = 0; i < 3; i++) {
-                board[i] = new char[3];
+                Board[i] = new char[3];
 
                 for (int j = 0; j < 3; j++) {
-                    board[i][j] = ' ';
+                    Board[i][j] = ' ';
                     int row = i;
                     int col = j;
-                    buttons[i * 3 + j].Click += (sender, e) => PlayerClickButton(sender, e, row, col);
+                    buttons[i * 3 + j].Click += (sender, e) => PlayerClickButton(sender, e, row, col, 'X');
                 }
             }
         }
-        
-        private void PlayerClickButton(object sender, RoutedEventArgs e, int row, int column)
-        {
+
+        public void PlayerClickButton(object sender, RoutedEventArgs e, int row, int column, char player) {
             if (gameOver)
                 return;
 
             Button button = sender as Button;
-            
-            if (board[row][column] == ' ') {
-                button.Content = 'X';
 
+            if (Board[row][column] == ' ') {
+                button.Content = player;
+                
                 button.Background = Brushes.Transparent;
                 button.Foreground = Brushes.White;
-                board[row][column] = 'X';
+                Board[row][column] = player;
 
                 counter++;
 
                 if (CheckWin('X')) {
-                    gameOver = true;
+                    GameOver = true;
                     GameLabel.Text = "Player Wins!";
                     return;
                 }
 
                 if (counter == 9) {
-                    gameOver = true;
+                    GameOver = true;
                     GameLabel.Text = "Draw!";
                     return;
                 }
@@ -97,7 +98,7 @@ namespace Tic_Tac_Toe
                 }
 
                 if (CheckWin('O')) {
-                    gameOver = true;
+                    GameOver = true;
                     GameLabel.Text = "AI Wins!";
                     return;
                 }
@@ -129,7 +130,8 @@ namespace Tic_Tac_Toe
         public void BotFourthDifficultyMove() {
             int[] move = GetWinningMove('O');
 
-            if (move != null) { // CHECK IF THERE IS WINNING MOVE OR NOT
+            if (move != null) {
+                // CHECK IF THERE IS WINNING MOVE OR NOT
                 MakeMove(move[0], move[1]);
                 Debug.WriteLine($"Winning move for O found: [{move[0]}, {move[1]}]");
                 return;
@@ -140,12 +142,14 @@ namespace Tic_Tac_Toe
 
             move = GetWinningMove('X');
 
-            if (move != null) { // CHECK IF THERE IS WINNING MOVE OF PLAYER TO BLOCK
+            if (move != null) {
+                // CHECK IF THERE IS WINNING MOVE OF PLAYER TO BLOCK
                 MakeMove(move[0], move[1]);
                 return;
             }
 
-            if (board[1][1] == ' ') { // MAKE A MOVE IN THE MIDDLE IF IT'S NOT TAKEN
+            if (Board[1][1] == ' ') {
+                // MAKE A MOVE IN THE MIDDLE IF IT'S NOT TAKEN
                 MakeMove(1, 1);
                 return;
             }
@@ -161,28 +165,32 @@ namespace Tic_Tac_Toe
 
                 switch (i) {
                     case 0:
-                        if (board[0][0] == ' ') {
+                        if (Board[0][0] == ' ') {
                             MakeMove(0, 0);
                             moveMade = true;
                         }
+
                         break;
                     case 1:
-                        if (board[0][2] == ' ') {
+                        if (Board[0][2] == ' ') {
                             MakeMove(0, 2);
                             moveMade = true;
                         }
+
                         break;
                     case 2:
-                        if (board[2][0] == ' ') {
+                        if (Board[2][0] == ' ') {
                             MakeMove(2, 0);
                             moveMade = true;
                         }
+
                         break;
                     case 3:
-                        if (board[2][2] == ' ') {
+                        if (Board[2][2] == ' ') {
                             MakeMove(2, 2);
                             moveMade = true;
                         }
+
                         break;
                 }
             }
@@ -193,7 +201,7 @@ namespace Tic_Tac_Toe
         }
 
         public void MakeMove(int row, int column) {
-            if (board[row][column] != ' ') {
+            if (Board[row][column] != ' ') {
                 switch (Difficulty) {
                     case 1:
                         BotFirstDifficultyMove();
@@ -213,7 +221,7 @@ namespace Tic_Tac_Toe
                 GetButton(row, column).Content = "O";
                 GetButton(row, column).Background = Brushes.Transparent;
                 GetButton(row, column).Foreground = Brushes.Red;
-                board[row][column] = 'O';
+                Board[row][column] = 'O';
                 counter++;
             }
         }
@@ -221,84 +229,84 @@ namespace Tic_Tac_Toe
         public int[] GetWinningMove(char player) {
             // CHECK FOR ROWS 
 
-            for (int i = 0; i < board.Length; i++) {
-                if (board[i][0] == player && board[i][1] == player) {
-                    if (board[i][2] == ' ')
+            for (int i = 0; i < Board.Length; i++) {
+                if (Board[i][0] == player && Board[i][1] == player) {
+                    if (Board[i][2] == ' ')
                         return new int[2] { i, 2 };
                 }
 
-                if (board[i][1] == player && board[i][2] == player) {
-                    if (board[i][0] == ' ')
+                if (Board[i][1] == player && Board[i][2] == player) {
+                    if (Board[i][0] == ' ')
                         return new int[2] { i, 0 };
                 }
 
-                if (board[i][0] == player && board[i][2] == player) {
-                    if (board[i][1] == ' ')
+                if (Board[i][0] == player && Board[i][2] == player) {
+                    if (Board[i][1] == ' ')
                         return new int[2] { i, 1 };
                 }
             }
 
             // CHECK FOR COLUMNS
 
-            for (int i = 0; i < board.Length; i++) {
-                if (board[0][i] == player && board[1][i] == player) {
-                    if (board[2][i] == ' ')
+            for (int i = 0; i < Board.Length; i++) {
+                if (Board[0][i] == player && Board[1][i] == player) {
+                    if (Board[2][i] == ' ')
                         return new int[2] { 2, i };
                 }
 
-                if (board[1][i] == player && board[2][i] == player) {
-                    if (board[0][i] == ' ')
+                if (Board[1][i] == player && Board[2][i] == player) {
+                    if (Board[0][i] == ' ')
                         return new int[2] { 0, i };
                 }
 
-                if (board[0][i] == player && board[2][i] == player) {
-                    if (board[1][i] == ' ')
+                if (Board[0][i] == player && Board[2][i] == player) {
+                    if (Board[1][i] == ' ')
                         return new int[2] { 1, i };
                 }
             }
 
             // CHECK FOR DIAGONALS
 
-            if (board[0][0] == player) {
-                if (board[1][1] == player) {
-                    if (board[2][2] == ' ')
+            if (Board[0][0] == player) {
+                if (Board[1][1] == player) {
+                    if (Board[2][2] == ' ')
                         return new int[2] { 2, 2 };
                 }
-                else if (board[2][2] == player) {
-                    if (board[1][1] == ' ')
+                else if (Board[2][2] == player) {
+                    if (Board[1][1] == ' ')
                         return new int[2] { 1, 1 };
                 }
             }
 
-            if (board[0][2] == player) {
-                if (board[1][1] == player) {
-                    if (board[2][0] == ' ')
+            if (Board[0][2] == player) {
+                if (Board[1][1] == player) {
+                    if (Board[2][0] == ' ')
                         return new int[2] { 2, 0 };
                 }
-                else if (board[2][0] == player) {
-                    if (board[1][1] == ' ')
+                else if (Board[2][0] == player) {
+                    if (Board[1][1] == ' ')
                         return new int[2] { 1, 1 };
                 }
             }
 
-            if (board[2][0] == player) {
-                if (board[1][1] == player) {
-                    if (board[0][2] == ' ')
+            if (Board[2][0] == player) {
+                if (Board[1][1] == player) {
+                    if (Board[0][2] == ' ')
                         return new int[2] { 0, 2 };
                 }
-                else if (board[0][2] == player) {
-                    if (board[1][1] == ' ')
+                else if (Board[0][2] == player) {
+                    if (Board[1][1] == ' ')
                         return new int[2] { 1, 1 };
                 }
             }
 
-            if (board[2][2] == player) {
-                if (board[1][1] == player) {
-                    if (board[0][0] == ' ')
+            if (Board[2][2] == player) {
+                if (Board[1][1] == player) {
+                    if (Board[0][0] == ' ')
                         return new int[2] { 0, 0 };
                 }
-                else if (board[0][0] == player) {
-                    if (board[1][1] == ' ')
+                else if (Board[0][0] == player) {
+                    if (Board[1][1] == ' ')
                         return new int[2] { 1, 1 };
                 }
             }
@@ -309,10 +317,10 @@ namespace Tic_Tac_Toe
         public bool CheckWin(char player) {
             // CHECK FOR ROWS AND COLUMNS
 
-            for (int i = 0; i < board.Length; i++) {
+            for (int i = 0; i < Board.Length; i++) {
                 if (
-                    (board[i][0] == player && board[i][1] == player && board[i][2] == player) ||
-                    (board[0][i] == player && board[1][i] == player && board[2][i] == player)
+                    (Board[i][0] == player && Board[i][1] == player && Board[i][2] == player) ||
+                    (Board[0][i] == player && Board[1][i] == player && Board[2][i] == player)
                 ) {
                     return true;
                 }
@@ -321,8 +329,8 @@ namespace Tic_Tac_Toe
             // CHECK FOR DIAGONALS
 
             if (
-                (board[0][0] == player && board[1][1] == player && board[2][2] == player) ||
-                (board[0][2] == player && board[1][1] == player && board[2][0] == player)
+                (Board[0][0] == player && Board[1][1] == player && Board[2][2] == player) ||
+                (Board[0][2] == player && Board[1][1] == player && Board[2][0] == player)
             ) {
                 return true;
             }
